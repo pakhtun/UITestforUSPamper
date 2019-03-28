@@ -56,57 +56,72 @@ namespace UITest10
                 .Android
                 // TODO: Update this path to point to your Android app and uncomment the
                 // code if the app is not included in the solution.
-                .ApkFile ("../../../Android/bin/Debug/app-us-uat.apk")
+              .ApkFile ("../../../Android/bin/Debug/app-us-uat.apk")
+           //     .ApkFile("../../../Android/bin/Debug/Prod.apk")
+
                 .StartApp();
         }
-
-        [Test]
+        //[Test]
+        //public void repl()
+        //{
+        //    app.Repl();
+        //}
+      [Test]
         public void a_Register()
         {
-           //app.Repl();
+            //app.Repl();
 
-             string str = generator.RandomString(10, false);
+            string str = generator.RandomString(10, false);
             int rand = generator.RandomNumber(5, 100);
             string randomnumber = rand.ToString();
             string email = String.Concat(str, randomnumber);
             string remain = "@pampers.com";
             final_email = String.Concat(email, remain);
-            Thread.Sleep(25000);
+            Thread.Sleep(15000);
             app.SwipeRightToLeft();
             app.SwipeRightToLeft();
             app.SwipeRightToLeft();
             app.Tap(x => x.Id("joinNowButton"));
             Thread.Sleep(7000);
+            var isDOB = app.Query("Child's Birth / Due Date").Any();
             app.Tap(x => x.Id("firstNameEditText"));
-            app.EnterText("Arshad");
+            app.EnterText("John");
             //needs to be changed to the calender element
             app.ScrollDownTo(x => x.Id("firstNameEditText"), strategy: ScrollStrategy.Auto);
             Thread.Sleep(3000);
-            app.Tap("Child's Birth / Due Date");
-            app.Query(c => c.Class("AlertDialogLayout"));
-            app.Tap("OK");
+            if (isDOB == true)
+            {
+                app.Tap("Child's Birth / Due Date");
+                app.Query(c => c.Class("AlertDialogLayout"));
+                app.Tap("OK");
+            }
             app.ScrollDownTo("Email", strategy: ScrollStrategy.Gesture, timeout: new TimeSpan(0, 1, 0));
             app.Tap("Email");
             app.Tap("Email");
             app.EnterText(final_email);
-            app.Tap("ZIP Code");
-            app.EnterText("34265");
+            var isZIP = app.Query("ZIP Code").Any();
+            if (isZIP == true)
+            {
+                app.Tap("ZIP Code");
+                app.EnterText("34265");
+            }
             app.ScrollDown("Password");
             app.Tap("Password");
             app.EnterText("magicA123");
             app.ScrollDownTo("I'd love to join!", strategy: ScrollStrategy.Gesture, timeout: new TimeSpan(0, 1, 0));
             app.Tap("I'd love to join!");
+            if(isDOB == false)
+            {
+
+            }
             app.Query(c => c.Marked("OK").Parent().Class("AlertDialogLayout"));
-           // b_ProfileUpdate();
-            //i_anotherchild();
-            //c_pamper_reward();
+            
+
             d_reg_logout();
-            //f_MyDetails();
-            //e_menubar();
-            //g_changepassword();
+           
         }
 
-        [Test]
+  [Test]
         public void login() {
 
             Thread.Sleep(20000);
@@ -121,13 +136,27 @@ namespace UITest10
             app.ScrollDownTo("Sign me in!", strategy: ScrollStrategy.Gesture, timeout: new TimeSpan(0, 1, 0));
             app.Tap(x => x.Id("signInButton"));
             Thread.Sleep(10000);
+
+            var isAccountSafeBox = app.Query("Keep your account (and your points!) extra safe").Any();
+            if(isAccountSafeBox == true)
+            {
+                app.Tap("I'll skip this");
+            }
+            var isAddCode = app.Query(x => x.Id("pop_up_title")).Any();
+            if (isAddCode == true)
+            {
+                app.Flash("Add code now");
+                app.Tap("Not now");
+            }
             b_ProfileUpdate();
-            i_anotherchild();
+           i_anotherchild();
             c_pamper_reward();
             e_menubar();
             f_MyDetails();
-            g_changepassword();
+          g_changepassword();
             home_ParentsHub();
+           home_GetMorePoints();
+            d_logout();
         }
 
 
@@ -136,7 +165,7 @@ namespace UITest10
             Thread.Sleep(25000);
             app.Tap("I've had another baby");
             app.Tap("Child's First Name");
-            app.EnterText("Aleesha");
+            app.EnterText("Alica ");
             app.Tap("Child's Birth / Due Date");
             app.Tap("Next month");
             app.Tap(x => x.Id("date_picker_day_picker"));
@@ -210,7 +239,7 @@ namespace UITest10
             app.Tap("Gender");
             app.Tap("Male");
             app.Tap("Last Name");
-            app.EnterText("Ahsan");
+            app.EnterText("Smith");
             app.Tap("Birthday");
             app.Tap(x => x.Id("date_picker_header_year"));
             app.Tap("1997");
@@ -256,8 +285,8 @@ namespace UITest10
         {
 
             Thread.Sleep(15000);
-            app.Tap(x => x.Id("imgBack"));
-            app.Tap(x => x.Id("imgBack"));
+          //  app.Tap(x => x.Id("imgBack"));
+           // app.Tap(x => x.Id("imgBack"));
             ////id for below
             app.Tap(x => x.Id("action_hamburger"));
             //app.Tap(x => x.Id("navAccountItem"));
@@ -300,10 +329,20 @@ namespace UITest10
             Thread.Sleep(15000);
             app.Tap(x => x.Id("action_home"));
             app.Tap("Parents' Hub");
-            app.SwipeRightToLeft(); 
-            app.SwipeRightToLeft(); 
-            app.SwipeRightToLeft(); 
+            Thread.Sleep(10000);
+
             app.SwipeRightToLeft();
+            Thread.Sleep(5000);
+
+            app.SwipeRightToLeft();
+            Thread.Sleep(5000);
+
+            app.SwipeRightToLeft();
+            Thread.Sleep(5000);
+
+            app.SwipeRightToLeft();
+            Thread.Sleep(5000);
+
             app.SwipeRightToLeft();
             app.Tap(x => x.Id("imgBack"));
         }
@@ -320,15 +359,31 @@ namespace UITest10
             app.Tap(x => x.Id("gotItButton"));
             app.Tap(x => x.Id("manualEntryImageView"));
             app.Tap(x => x.Id("textInputEditText"));
-            app.EnterText("RNT94K3FHXWJ74");
+            app.EnterText("W979KRNJN7CHJF");
             app.Tap(x => x.Id("submitCodeButton"));
-            app.EnterText("XTR3CWHJ347TWC");
-            app.EnterText("XTR3CWHJ347TWC");
-            app.Tap(x => x.Id("submitCodeButton"));
-            app.Flash(x => x.Id("scanAnotherCodeButton"));
-            app.Tap(x => x.Id("wantAnotherButton"));
-            app.Tap(x => x.Id("helpImageView"));
-            app.Tap(x => x.Id("helpImageView"));
+            var isSuccess = app.Query(x=>x.Id("pointEarnedTextView")).Any();
+            if(isSuccess== true)
+            {
+                app.Flash(x => x.Id("scanAnotherCodeButton"));
+                app.Flash(x => x.Id("wantAnotherButton"));
+                app.Tap(x => x.Id("closeImageView"));
+            }
+
+            //var isFailed = app.Query("When codes fail . . .").Any();
+            //if(isFailed == true)
+            //{
+            //    app.Flash("Try Again");
+            //    app.Flash("Help me find codes");
+
+            //}
+            app.Tap(x => x.Id("closeImageView"));
+            app.Tap("Scan Code Now");
+            app.Tap(x => x.Id("wipeImageView"));
+            var isWipesBox = app.Query("Wipes codes can only be entered manually. So give those texting muscles a workout!").Any();
+            if(isWipesBox == true)
+            {
+                app.Tap(x => x.Id("scan_wipes_dialog_manual_btn"));
+            }
             app.Tap("Got a wipes tub?");
             app.Tap("Got a wipes tub?");
             app.Tap("Got a wipes refill pack?");
